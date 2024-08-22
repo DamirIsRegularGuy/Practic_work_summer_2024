@@ -1,0 +1,523 @@
+object Form3: TForm3
+  Left = 0
+  Top = 0
+  Caption = 'Form3'
+  ClientHeight = 769
+  ClientWidth = 1394
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -13
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  DesignSize = (
+    1394
+    769)
+  PixelsPerInch = 120
+  TextHeight = 16
+  object DBGrid1: TDBGrid
+    Left = 544
+    Top = 8
+    Width = 842
+    Height = 321
+    Anchors = [akTop, akRight]
+    DataSource = DataSource1
+    TabOrder = 0
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -13
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = []
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'First_name'
+        Width = 150
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Name'
+        Width = 100
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Last_name'
+        Width = 150
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Position'
+        Width = 150
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Name_1'
+        Width = 250
+        Visible = True
+      end>
+  end
+  object Panel1: TPanel
+    Left = 8
+    Top = 8
+    Width = 530
+    Height = 321
+    Anchors = [akLeft, akTop, akRight]
+    TabOrder = 1
+    object Label1: TLabel
+      Left = 0
+      Top = 176
+      Width = 273
+      Height = 21
+      Caption = 'Label1'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -17
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label2: TLabel
+      Left = 279
+      Top = 176
+      Width = 251
+      Height = 21
+      Caption = 'Label2'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -17
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label3: TLabel
+      Left = 0
+      Top = 253
+      Width = 177
+      Height = 21
+      Caption = 'Label3'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -17
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label4: TLabel
+      Left = 183
+      Top = 253
+      Width = 177
+      Height = 21
+      Caption = 'Label4'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -17
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label5: TLabel
+      Left = 366
+      Top = 253
+      Width = 164
+      Height = 21
+      Caption = 'Label5'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -17
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Shape2: TShape
+      Left = 0
+      Top = 203
+      Width = 538
+      Height = 1
+    end
+    object Napr_search: TComboBox
+      Left = 0
+      Top = 0
+      Width = 265
+      Height = 29
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -17
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 0
+      Text = #1053#1072#1087#1088#1072#1074#1083#1077#1085#1080#1077
+      OnChange = Napr_searchChange
+      OnDropDown = Napr_searchDropDown
+    end
+    object ComboBox3: TComboBox
+      Left = 0
+      Top = 35
+      Width = 265
+      Height = 29
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -17
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 1
+      Text = #1050#1091#1088#1089
+      Items.Strings = (
+        '1'
+        '2'
+        '3'
+        '4')
+    end
+    object Semestr: TComboBox
+      Left = 271
+      Top = 35
+      Width = 259
+      Height = 29
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -17
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 2
+      Text = #1057#1077#1084#1077#1089#1090#1088
+      OnChange = SemestrChange
+      Items.Strings = (
+        '1'
+        '2'
+        '3'
+        '4'
+        '5'
+        '6'
+        '7'
+        '8')
+    end
+    object Dissipl: TComboBox
+      Left = 271
+      Top = 0
+      Width = 259
+      Height = 29
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -17
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 3
+      Text = #1055#1088#1077#1076#1084#1077#1090
+      OnChange = DissiplChange
+      OnDropDown = DissiplDropDown
+    end
+    object ComboBox6: TComboBox
+      Left = 0
+      Top = 210
+      Width = 177
+      Height = 29
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -17
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 4
+      Text = 'ComboBox6'
+    end
+    object ComboBox7: TComboBox
+      Left = 183
+      Top = 210
+      Width = 177
+      Height = 29
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -17
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 5
+      Text = 'ComboBox7'
+    end
+    object ComboBox8: TComboBox
+      Left = 366
+      Top = 210
+      Width = 164
+      Height = 29
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -17
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 6
+      Text = 'ComboBox8'
+    end
+    object Button1: TButton
+      Left = 0
+      Top = 280
+      Width = 177
+      Height = 41
+      Caption = 'Button1'
+      TabOrder = 7
+    end
+    object Button2: TButton
+      Left = 183
+      Top = 280
+      Width = 177
+      Height = 41
+      Caption = 'Button2'
+      TabOrder = 8
+    end
+    object Button3: TButton
+      Left = 366
+      Top = 280
+      Width = 164
+      Height = 41
+      Caption = 'Button3'
+      TabOrder = 9
+    end
+    object audit: TLabeledEdit
+      Left = 80
+      Top = 80
+      Width = 185
+      Height = 24
+      Ctl3D = True
+      EditLabel.Width = 28
+      EditLabel.Height = 16
+      EditLabel.Caption = 'audit'
+      ImeMode = imOpen
+      LabelPosition = lpLeft
+      ParentCtl3D = False
+      TabOrder = 10
+    end
+    object lab: TLabeledEdit
+      Left = 352
+      Top = 80
+      Width = 178
+      Height = 22
+      BorderStyle = bsNone
+      Ctl3D = False
+      EditLabel.Width = 72
+      EditLabel.Height = 16
+      EditLabel.Caption = 'LabeledEdit1'
+      LabelPosition = lpLeft
+      ParentCtl3D = False
+      TabOrder = 11
+    end
+    object lec: TLabeledEdit
+      Left = 80
+      Top = 110
+      Width = 185
+      Height = 22
+      BorderStyle = bsNone
+      Ctl3D = False
+      EditLabel.Width = 72
+      EditLabel.Height = 16
+      EditLabel.Caption = 'LabeledEdit1'
+      LabelPosition = lpLeft
+      ParentCtl3D = False
+      TabOrder = 12
+    end
+    object semenar: TLabeledEdit
+      Left = 352
+      Top = 110
+      Width = 178
+      Height = 22
+      BorderStyle = bsNone
+      Ctl3D = False
+      EditLabel.Width = 72
+      EditLabel.Height = 16
+      EditLabel.Caption = 'LabeledEdit1'
+      LabelPosition = lpLeft
+      ParentCtl3D = False
+      TabOrder = 13
+    end
+    object prac: TLabeledEdit
+      Left = 80
+      Top = 140
+      Width = 185
+      Height = 22
+      BorderStyle = bsNone
+      Ctl3D = False
+      EditLabel.Width = 72
+      EditLabel.Height = 16
+      EditLabel.Caption = 'LabeledEdit1'
+      LabelPosition = lpLeft
+      ParentCtl3D = False
+      TabOrder = 14
+    end
+    object sam: TLabeledEdit
+      Left = 352
+      Top = 140
+      Width = 178
+      Height = 22
+      BorderStyle = bsNone
+      Ctl3D = False
+      EditLabel.Width = 72
+      EditLabel.Height = 16
+      EditLabel.Caption = 'LabeledEdit1'
+      LabelPosition = lpLeft
+      ParentCtl3D = False
+      TabOrder = 15
+    end
+  end
+  object DBGrid2: TDBGrid
+    Left = 8
+    Top = 335
+    Width = 1378
+    Height = 426
+    Anchors = [akLeft, akTop, akRight, akBottom]
+    DataSource = DataSource2
+    TabOrder = 2
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -13
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = []
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'id'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Name_Dist'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Semestr'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Cours'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Speciality_Id'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Prepod_Id'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'In_Audience'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Lecture_Hours'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Practice_Hours'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Lab_Hours'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Semenars'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Independent_Hours'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Form_Of_Control'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'id_1'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Name'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'id_2'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Name_1'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'id_3'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'subjects'
+        Visible = True
+      end>
+  end
+  object DataSource1: TDataSource
+    DataSet = ADOQuery1
+    Left = 1360
+    Top = 8
+  end
+  object ADOQuery1: TADOQuery
+    Active = True
+    Connection = Form1.ADOConnection1
+    CursorType = ctStatic
+    Parameters = <>
+    SQL.Strings = (
+      'select * from Prepods'
+      'JOIN Kaphedra ON Prepods.Kaphedra = Kaphedra.id')
+    Left = 1360
+    Top = 32
+  end
+  object ADOQuery2: TADOQuery
+    Active = True
+    Connection = Form1.ADOConnection1
+    CursorType = ctStatic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT *'
+      'FROM Dist_With_Prepod'
+      
+        'JOIN Form_Of_Control ON Dist_With_Prepod.Form_Of_Control = Form_' +
+        'Of_Control.id'
+      
+        'JOIN Speciality ON Dist_With_Prepod.Speciality_Id = Speciality.i' +
+        'd'
+      'JOIN Subjects ON Dist_With_Prepod.Name_Dist = Subjects.id')
+    Left = 1360
+    Top = 64
+  end
+  object DataSource2: TDataSource
+    DataSet = ADOQuery2
+    Left = 1320
+    Top = 8
+  end
+  object Napr: TADOQuery
+    Connection = Form1.ADOConnection1
+    Parameters = <>
+    Left = 1360
+    Top = 96
+  end
+end

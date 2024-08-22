@@ -1,0 +1,364 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "Unit3.h"
+#include "Unit1.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+TForm3 *Form3;
+//---------------------------------------------------------------------------
+__fastcall TForm3::TForm3(TComponent* Owner)
+	: TForm(Owner)
+{
+
+		   audit->EditLabel->Caption = "Аудиторные часы";
+		   lec->EditLabel->Caption = "Лекции";
+		   prac->EditLabel->Caption = "Практики";
+		   lab->EditLabel->Caption = "Лабораторные";
+		   semenar->EditLabel->Caption = "Семенары";
+		   sam->EditLabel->Caption = "Самостоятельные";
+
+
+
+
+	ComboBoxFamiliya->Clear();
+	ComboBoxImya->Clear();
+	ComboBoxOtchestvo->Clear();
+
+	ADOQuery2->Close();
+	ADOQuery2->SQL->Clear();
+	ADOQuery2->SQL->Add("use Practic_work");
+	ADOQuery2->SQL->Add("SELECT * FROM Prepods");
+	ADOQuery2->Open();
+
+
+   ADOQuery2->Close();
+   ADOQuery2->SQL->Clear();
+   ADOQuery2->SQL->Add("use Practic_work");
+   ADOQuery2->SQL->Add("SELECT * FROM Dist_With_Prepod");
+   ADOQuery2->SQL->Add("JOIN Form_Of_Control ON Dist_With_Prepod.Form_Of_Control = Form_Of_Control.id");
+   ADOQuery2->SQL->Add("JOIN Speciality ON Dist_With_Prepod.Speciality_Id = Speciality.id");
+   ADOQuery2->SQL->Add("JOIN Subjects ON Dist_With_Prepod.Name_Dist = Subjects.id");
+   ADOQuery2->Open();
+
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm3::Napr_searchChange(TObject *Sender)
+{
+   ADOQuery2->Close();
+   ADOQuery2->SQL->Clear();
+   ADOQuery2->SQL->Add("use Practic_work");
+   ADOQuery2->SQL->Add("SELECT * FROM Dist_With_Prepod");
+   ADOQuery2->SQL->Add("JOIN Form_Of_Control ON Dist_With_Prepod.Form_Of_Control = Form_Of_Control.id");
+   ADOQuery2->SQL->Add("JOIN Speciality ON Dist_With_Prepod.Speciality_Id = Speciality.id");
+   ADOQuery2->SQL->Add("JOIN Subjects ON Dist_With_Prepod.Name_Dist = Subjects.id");
+   ADOQuery2->SQL->Add("where Speciality.Name = '" + Napr_search->Text + "';");
+   //ADOQuery1->SQL->Add("where Speciality.Name = 'Прикладная Математика и  Информатика';");
+   //ShowMessage(ADOQuery1->SQL->Text);
+   try
+   {
+	ADOQuery2->Open();
+   }
+   catch (Exception &e)
+   {
+	ShowMessage("Ошибка выполнения запроса: " + e.Message);
+   }
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm3::Napr_searchDropDown(TObject *Sender)
+{
+   Napr_search->Items->Clear();
+   Napr->Close();
+   Napr->SQL->Clear();
+   Napr->SQL->Add("use Practic_work");
+   Napr->SQL->Add("SELECT * FROM Speciality");
+   Napr->Open();
+   while (!Napr->Eof)
+   {
+	  Napr_search->Items->Add(Napr->FieldByName("name")->AsString);
+	  Napr->Next();
+   }
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm3::DissiplChange(TObject *Sender)
+{
+   ADOQuery2->Close();
+   ADOQuery2->SQL->Clear();
+   ADOQuery2->SQL->Add("use Practic_work");
+   ADOQuery2->SQL->Add("SELECT * FROM Dist_With_Prepod");
+   ADOQuery2->SQL->Add("JOIN Form_Of_Control ON Dist_With_Prepod.Form_Of_Control = Form_Of_Control.id");
+   ADOQuery2->SQL->Add("JOIN Speciality ON Dist_With_Prepod.Speciality_Id = Speciality.id");
+   ADOQuery2->SQL->Add("JOIN Subjects ON Dist_With_Prepod.Name_Dist = Subjects.id");
+   ADOQuery2->SQL->Add("where Speciality.Name = '" + Napr_search->Text + "'and subjects='" + Dissipl->Text + "'");
+   //ADOQuery1->SQL->Add("where Speciality.Name = 'Прикладная Математика и  Информатика';");
+   //ShowMessage(ADOQuery1->SQL->Text);
+   ADOQuery2->Open();
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm3::DissiplDropDown(TObject *Sender)
+{
+   Dissipl->Items->Clear();
+   Napr->Close();
+   Napr->SQL->Clear();
+   Napr->SQL->Add("use Practic_work");
+   Napr->SQL->Add("SELECT * FROM Dist");
+   Napr->SQL->Add("JOIN Form_Of_Control ON Dist.Form_Of_Control = Form_Of_Control.id");
+   Napr->SQL->Add("JOIN Speciality ON Dist.Speciality_Id = Speciality.id");
+   Napr->SQL->Add("JOIN Subjects ON Dist.Name_Dist = Subjects.id");
+   Napr->SQL->Add("where Speciality.Name = '" + Napr_search->Text + "';");
+   //ADOQuery1->SQL->Add("where Speciality.Name = 'Прикладная Математика и  Информатика';");
+   //ShowMessage(ADOQuery1->SQL->Text);
+   Napr->Open();
+
+   for(int i=0; i<(Napr->RecordCount); i++)
+   {
+	  bool pool=true;
+	  for(int j=0; j < Dissipl->Items->Count; j++ )
+	   if((Napr->FieldByName("subjects")->AsString)==(Dissipl->Items->Strings[j]))
+	   {
+		 pool=false;
+		 break;
+	   }
+		if(pool) Dissipl->Items->Add(Napr->FieldByName("subjects")->AsString);
+		Napr->Next();
+   }
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm3::SemestrChange(TObject *Sender)
+{
+   ADOQuery2->Close();
+   ADOQuery2->SQL->Clear();
+   ADOQuery2->SQL->Add("use Practic_work");
+   ADOQuery2->SQL->Add("SELECT * FROM Dist");
+   ADOQuery2->SQL->Add("JOIN Form_Of_Control ON Dist.Form_Of_Control = Form_Of_Control.id");
+   ADOQuery2->SQL->Add("JOIN Speciality ON Dist.Speciality_Id = Speciality.id");
+   ADOQuery2->SQL->Add("JOIN Subjects ON Dist.Name_Dist = Subjects.id");
+   ADOQuery2->SQL->Add("where Speciality.Name = '" + Napr_search->Text + "'and subjects='" + Dissipl->Text + "' and semestr="+Semestr->Text);
+   //ADOQuery1->SQL->Add("where Speciality.Name = 'Прикладная Математика и  Информатика';");
+   //ShowMessage(ADOQuery1->SQL->Text);
+   ADOQuery2->Open();
+
+
+   if(!ADOQuery2->IsEmpty())
+   {
+			audit->Text = ADOQuery2->FieldByName("In_Audience")->AsString;
+
+			lec->Text = ADOQuery2->FieldByName("Lecture_Hours")->AsString;
+
+			prac->Text = ADOQuery2->FieldByName("Practice_Hours")->AsString;
+
+			lab->Text = ADOQuery2->FieldByName("Lab_Hours")->AsString;
+
+			semenar->Text = ADOQuery2->FieldByName("Semenars")->AsString;
+
+			sam->Text = ADOQuery2->FieldByName("Independent_Hours")->AsString;
+
+			String controlDist = ADOQuery2->FieldByName("Form_Of_Control")->AsString;
+
+			ADOQuery2->Close();
+			ADOQuery2->SQL->Clear();
+			ADOQuery2->SQL->Add("use Practic_work");
+			ADOQuery2->SQL->Add("SELECT * FROM Form_Of_Control");
+			ADOQuery2->SQL->Add("where id = " + controlDist);
+			ADOQuery2->Open();
+
+			tipeControl->Caption = "Форма контроля: " + ADOQuery2->FieldByName("Name")->AsString;
+
+
+			ADOQuery2->Close();
+			ADOQuery2->SQL->Clear();
+			ADOQuery2->SQL->Add("use Practic_work");
+			ADOQuery2->SQL->Add("SELECT * FROM Students");
+			ADOQuery2->SQL->Add("Where Cours = " + ComboBox3->Text + " and Speciality IN(SELECT id FROM Speciality WHERE Name = '" + Napr_search->Text + "')");
+			ADOQuery2->Open();
+
+			queStudent->Caption = "Кол-во студентов в группе: " + IntToStr(ADOQuery2->RecordCount);
+   }
+   else
+   {
+		   audit->Clear();
+		   lec->Clear();
+		   prac->Clear();
+		   lab->Clear();
+		   semenar->Clear();
+		   sam->Clear();
+
+		   tipeControl->Caption = "Форма контроля: ";
+		   queStudent->Caption = "Кол-во студентов в группе: ";
+   }
+
+
+
+   ADOQuery2->Close();
+   ADOQuery2->SQL->Clear();
+   ADOQuery2->SQL->Add("use Practic_work");
+   ADOQuery2->SQL->Add("SELECT * FROM Dist_With_Prepod");
+   ADOQuery2->SQL->Add("JOIN Form_Of_Control ON Dist_With_Prepod.Form_Of_Control = Form_Of_Control.id");
+   ADOQuery2->SQL->Add("JOIN Speciality ON Dist_With_Prepod.Speciality_Id = Speciality.id");
+   ADOQuery2->SQL->Add("JOIN Subjects ON Dist_With_Prepod.Name_Dist = Subjects.id");
+   ADOQuery2->SQL->Add("where Speciality.Name = '" + Napr_search->Text + "'and subjects='" + Dissipl->Text + "' and semestr="+Semestr->Text);
+   //ADOQuery1->SQL->Add("where Speciality.Name = 'Прикладная Математика и  Информатика';");
+   //ShowMessage(ADOQuery1->SQL->Text);
+   ADOQuery2->Open();
+
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm3::DBGrid1CellClick(TColumn *Column)
+{
+	String familiya = ADOQuery1->FieldByName("First_name")->AsString;
+	String imya = ADOQuery1->FieldByName("Name")->AsString;
+	String otchestvo = ADOQuery1->FieldByName("Last_name")->AsString;
+	String doljnost = ADOQuery1->FieldByName("Position")->AsString;
+
+	int kurs = StrToInt(ComboBox3->Text);
+	int semestr = StrToInt(Semestr->Text);
+	String speciality_name = Napr_search->Text;
+	String subject_name =  Dissipl->Text;
+
+	ComboBoxFamiliya->Text = familiya;
+	ComboBoxImya->Text = imya;
+	ComboBoxOtchestvo->Text = otchestvo;
+
+	String chasy;
+
+	if (doljnost == "Профессор")
+	 {
+		chasy = "600-650";
+	} else if (doljnost == "Доцент")
+	 {
+		chasy = "650-700";
+	} else if (doljnost == "Старший преподаватель")
+	{
+		chasy = "750-800";
+	} else if (doljnost == "Ассистент")
+	{
+		chasy = "850-900";
+	} else
+	 {
+		chasy = "неизвестная должность";
+	}
+
+	Label3->Caption = "Всего часов: " + chasy;
+
+
+	ADOQuery2->Close();
+	ADOQuery2->SQL->Clear();
+	ADOQuery2->SQL->Add("use Practic_work");
+	ADOQuery2->SQL->Add("SELECT SUM(Dist_With_Prepod.Lecture_Hours + Dist_With_Prepod.Practice_Hours + Dist_With_Prepod.Lab_Hours + Dist_With_Prepod.Semenars) AS TotalHours");
+	ADOQuery2->SQL->Add("FROM Dist_With_Prepod");
+	ADOQuery2->SQL->Add("JOIN Prepods ON Dist_With_Prepod.Prepod_Id = Prepods.id");
+	ADOQuery2->SQL->Add("JOIN Form_Of_Control ON Dist_With_Prepod.Form_Of_Control = Form_Of_Control.id");
+	ADOQuery2->SQL->Add("JOIN Speciality ON Dist_With_Prepod.Speciality_Id = Speciality.id");
+	ADOQuery2->SQL->Add("JOIN Subjects ON Dist_With_Prepod.Name_Dist = Subjects.id");
+	ADOQuery2->SQL->Add("WHERE Prepods.First_name = :FirstName AND Prepods.Name = :Name AND Prepods.Last_name = :LastName");
+	ADOQuery2->SQL->Add("AND Dist_With_Prepod.Cours = :Cours AND Dist_With_Prepod.Semestr = :Semestr");
+	ADOQuery2->SQL->Add("AND Speciality.Name = :SpecialityName AND Subjects.subjects = :SubjectName");
+	ADOQuery2->Parameters->ParamByName("FirstName")->Value = familiya;
+	ADOQuery2->Parameters->ParamByName("Name")->Value = imya;
+	ADOQuery2->Parameters->ParamByName("LastName")->Value = otchestvo;
+	ADOQuery2->Parameters->ParamByName("Cours")->Value = kurs;
+	ADOQuery2->Parameters->ParamByName("Semestr")->Value = semestr;
+	ADOQuery2->Parameters->ParamByName("SpecialityName")->Value = speciality_name;
+	ADOQuery2->Parameters->ParamByName("SubjectName")->Value = subject_name;
+	ADOQuery2->Open();
+
+	if (!ADOQuery2->Eof)
+	{
+		int totalHours = ADOQuery2->FieldByName("TotalHours")->AsInteger;
+		Label4->Caption = "Имеется: " + IntToStr(totalHours);
+	} else
+	{
+		Label4->Caption = "Данные не найдены.";
+	}
+
+
+	ADOQuery2->Close();
+	ADOQuery2->SQL->Clear();
+	ADOQuery2->SQL->Add("use Practic_work");
+	ADOQuery2->SQL->Add("SELECT Dist_With_Prepod.*, Prepods.*, Speciality.Name AS SpecialityName, Subjects.subjects AS SubjectName");
+    ADOQuery2->SQL->Add("FROM Dist_With_Prepod");
+	ADOQuery2->SQL->Add("JOIN Prepods ON Dist_With_Prepod.Prepod_Id = Prepods.id");
+	ADOQuery2->SQL->Add("JOIN Form_Of_Control ON Dist_With_Prepod.Form_Of_Control = Form_Of_Control.id");
+    ADOQuery2->SQL->Add("JOIN Speciality ON Dist_With_Prepod.Speciality_Id = Speciality.id");
+    ADOQuery2->SQL->Add("JOIN Subjects ON Dist_With_Prepod.Name_Dist = Subjects.id");
+	ADOQuery2->SQL->Add("WHERE Prepods.First_name = :FirstName AND Prepods.Name = :Name AND Prepods.Last_name = :LastName");
+    ADOQuery2->SQL->Add("AND Dist_With_Prepod.Cours = :Cours AND Dist_With_Prepod.Semestr = :Semestr");
+    ADOQuery2->SQL->Add("AND Speciality.Name = :SpecialityName AND Subjects.subjects = :SubjectName");
+	ADOQuery2->Parameters->ParamByName("FirstName")->Value = familiya;
+    ADOQuery2->Parameters->ParamByName("Name")->Value = imya;
+    ADOQuery2->Parameters->ParamByName("LastName")->Value = otchestvo;
+	ADOQuery2->Parameters->ParamByName("Cours")->Value = kurs;
+    ADOQuery2->Parameters->ParamByName("Semestr")->Value = semestr;
+	ADOQuery2->Parameters->ParamByName("SpecialityName")->Value = speciality_name;
+	ADOQuery2->Parameters->ParamByName("SubjectName")->Value = subject_name;
+	ADOQuery2->Open();
+
+
+	int posTotalHours = Label3->Caption.Pos(":") + 2;
+	UnicodeString hoursRange = Label3->Caption.SubString(posTotalHours, Label3->Caption.Length() - posTotalHours + 1);
+
+	int posCurrentHours = Label4->Caption.Pos(":") + 2;
+	UnicodeString currentHoursStr = Label4->Caption.SubString(posCurrentHours, Label4->Caption.Length() - posCurrentHours + 1);
+
+int minHours = hoursRange.SubString(1, hoursRange.Pos("-") - 1).ToInt();
+    int maxHours = hoursRange.SubString(hoursRange.Pos("-") + 1, hoursRange.Length()).ToInt();
+	int currentHours = currentHoursStr.ToInt();
+
+	int remainingHours = maxHours - currentHours;
+
+    if (remainingHours < 0)
+    {
+        remainingHours = 0;
+	}
+
+	Label5->Caption = "Осталось: " + IntToStr(remainingHours);
+
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm3::ComboBoxOtchestvoChange(TObject *Sender)
+{
+	String familiya = ComboBoxFamiliya->Text;
+	String imya = ComboBoxImya->Text;
+	String otchestvo = ComboBoxOtchestvo->Text;
+
+	ADOQuery1->Close();
+	ADOQuery1->SQL->Clear();
+	ADOQuery1->SQL->Add("use Practic_work");
+	ADOQuery1->SQL->Add("select * from Prepods");
+	ADOQuery1->SQL->Add("where First_name = '" + familiya + "' and Name = '" + imya + "'and Last_name = '" + otchestvo + "'");
+	ADOQuery1->Open();
+	String doljnost = ADOQuery1->FieldByName("Position")->AsString;
+
+	String chasy;
+
+	if (doljnost == "Профессор")
+	 {
+		chasy = "600-650";
+	} else if (doljnost == "Доцент")
+	 {
+		chasy = "650-700";
+	} else if (doljnost == "Старший преподаватель")
+	{
+		chasy = "750-800";
+	} else if (doljnost == "Ассистент")
+	{
+		chasy = "850-900";
+	} else
+	 {
+		chasy = "неизвестная должность";
+	}
+
+	Label3->Caption = "Всего часов: " + chasy;
+
+    ADOQuery1->Close();
+	ADOQuery1->SQL->Clear();
+	ADOQuery1->SQL->Add("use Practic_work");
+	ADOQuery1->SQL->Add("select * from Prepods");
+	ADOQuery1->SQL->Add("JOIN Kaphedra ON Prepods.Kaphedra = Kaphedra.id");
+	ADOQuery1->Open();
+
+}
+//---------------------------------------------------------------------------

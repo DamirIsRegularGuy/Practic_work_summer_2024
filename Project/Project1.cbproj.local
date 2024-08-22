@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.727,=C:\Users\Damir\Documents\Embarcadero\Studio\Projects\Project1PCH1.h</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.780,=C:\Users\Damir\Documents\Embarcadero\Studio\Projects\Unit1.cpp</Transaction>
+    <Transaction>2024.06.28 16:34:09.201,=C:\Users\Damir\Documents\Embarcadero\Studio\Projects\Project1PCH1.h</Transaction>
+    <Transaction>2024.06.28 16:34:09.243,=C:\Users\Damir\Documents\Embarcadero\Studio\Projects\Unit1.cpp</Transaction>
+    <Transaction>2024.06.28 16:34:26.250,=C:\Users\Damir\Documents\Embarcadero\Studio\Projects\Unit2.cpp</Transaction>
+    <Transaction>2024.07.02 11:20:08.346,C:\Users\Damir\Desktop\Practica\Project\Unit1.cpp=C:\Users\Damir\Documents\Embarcadero\Studio\Projects\Unit1.cpp</Transaction>
+    <Transaction>2024.07.02 11:20:08.346,C:\Users\Damir\Desktop\Practica\Project\Unit1.dfm=C:\Users\Damir\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>2024.07.02 11:20:08.346,C:\Users\Damir\Desktop\Practica\Project\Unit1.h=C:\Users\Damir\Documents\Embarcadero\Studio\Projects\Unit1.h</Transaction>
+    <Transaction>2024.07.02 11:20:10.250,C:\Users\Damir\Desktop\Practica\Project\Unit2.dfm=C:\Users\Damir\Documents\Embarcadero\Studio\Projects\Unit2.dfm</Transaction>
+    <Transaction>2024.07.02 11:20:10.250,C:\Users\Damir\Desktop\Practica\Project\Unit2.cpp=C:\Users\Damir\Documents\Embarcadero\Studio\Projects\Unit2.cpp</Transaction>
+    <Transaction>2024.07.02 11:20:10.250,C:\Users\Damir\Desktop\Practica\Project\Unit2.h=C:\Users\Damir\Documents\Embarcadero\Studio\Projects\Unit2.h</Transaction>
+    <Transaction>2024.07.02 11:20:12.059,C:\Users\Damir\Desktop\Practica\Project\Project1PCH1.h=C:\Users\Damir\Documents\Embarcadero\Studio\Projects\Project1PCH1.h</Transaction>
+    <Transaction>2024.07.02 11:20:13.713,C:\Users\Damir\Desktop\Practica\Project\Project1.cbproj=C:\Users\Damir\Documents\Embarcadero\Studio\Projects\Project1.cbproj</Transaction>
+    <Transaction>2024.07.04 16:39:21.645,=C:\Users\Damir\Desktop\Practica\Project\Unit3.cpp</Transaction>
+  </Transactions>
+</BorlandProject>

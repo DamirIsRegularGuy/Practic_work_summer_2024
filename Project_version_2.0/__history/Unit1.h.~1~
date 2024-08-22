@@ -1,0 +1,128 @@
+//---------------------------------------------------------------------------
+
+#ifndef Unit1H
+#define Unit1H
+//---------------------------------------------------------------------------
+#include <System.Classes.hpp>
+#include <Vcl.Controls.hpp>
+#include <Vcl.StdCtrls.hpp>
+#include <Vcl.Forms.hpp>
+#include <Data.DB.hpp>
+#include <Data.Win.ADODB.hpp>
+#include <Vcl.Buttons.hpp>
+#include <Vcl.ComCtrls.hpp>
+#include <Vcl.DBGrids.hpp>
+#include <Vcl.ExtCtrls.hpp>
+#include <Vcl.Grids.hpp>
+//---------------------------------------------------------------------------
+class TForm1 : public TForm
+{
+__published:	// IDE-managed Components
+	TPageControl *PageControl1;
+	TTabSheet *TabSheet1;
+	TTabSheet *TabSheet2;
+	TDBGrid *DBGrid1;
+	TPanel *Panel1;
+	TEdit *audit;
+	TEdit *lec;
+	TEdit *prac;
+	TEdit *lab;
+	TEdit *semenar;
+	TEdit *sam;
+	TButton *add;
+	TButton *update;
+	TButton *delet;
+	TComboBox *Dissipl;
+	TComboBox *Semestr;
+	TComboBox *Napr_search;
+	TComboBox *contr;
+	TButton *prepodWindow;
+	TTabSheet *TabSheet3;
+	TTabSheet *TabSheet4;
+	TSpeedButton *SpeedButton6;
+	TSpeedButton *SpeedButton7;
+	TSpeedButton *SpeedButton8;
+	TSpeedButton *SpeedButton9;
+	TSpeedButton *SpeedButton10;
+	TSpeedButton *SpeedButton11;
+	TSpeedButton *SpeedButton12;
+	TSpeedButton *SpeedButton1;
+	TSpeedButton *SpeedButton2;
+	TSpeedButton *SpeedButton3;
+	TSpeedButton *SpeedButton4;
+	TSpeedButton *SpeedButton5;
+	TStringGrid *StringGrid3;
+	TPanel *Panel4;
+	TLabel *Label24;
+	TLabel *Label23;
+	TLabel *Label25;
+	TLabel *Label26;
+	TButton *Button21;
+	TEdit *Edit22;
+	TButton *Button22;
+	TEdit *Edit23;
+	TComboBox *ComboBox11;
+	TComboBox *ComboBox12;
+	TComboBox *ComboBox13;
+	TEdit *Edit21;
+	TDateTimePicker *DateTimePicker4;
+	TPageControl *PageControl2;
+	TTabSheet *TabSheet5;
+	TTabSheet *TabSheet6;
+	TDBGrid *DBGrid2;
+	TPanel *Panel2;
+	TEdit *Edit1;
+	TEdit *Edit2;
+	TEdit *Edit3;
+	TEdit *Edit4;
+	TEdit *Edit5;
+	TEdit *Edit6;
+	TButton *Button1;
+	TButton *Button2;
+	TButton *Button3;
+	TComboBox *ComboBox1;
+	TComboBox *ComboBox2;
+	TComboBox *ComboBox3;
+	TComboBox *ComboBox4;
+	TButton *Button4;
+	TTabSheet *TabSheet7;
+	TTabSheet *TabSheet8;
+	TSpeedButton *SpeedButton13;
+	TSpeedButton *SpeedButton14;
+	TSpeedButton *SpeedButton15;
+	TSpeedButton *SpeedButton16;
+	TSpeedButton *SpeedButton17;
+	TSpeedButton *SpeedButton18;
+	TSpeedButton *SpeedButton19;
+	TSpeedButton *SpeedButton20;
+	TSpeedButton *SpeedButton21;
+	TSpeedButton *SpeedButton22;
+	TSpeedButton *SpeedButton23;
+	TSpeedButton *SpeedButton24;
+	TStringGrid *StringGrid1;
+	TPanel *Panel3;
+	TLabel *Label1;
+	TLabel *Label2;
+	TLabel *Label3;
+	TLabel *Label4;
+	TButton *Button5;
+	TEdit *Edit7;
+	TButton *Button6;
+	TEdit *Edit8;
+	TComboBox *ComboBox5;
+	TComboBox *ComboBox6;
+	TComboBox *ComboBox7;
+	TEdit *Edit9;
+	TDateTimePicker *DateTimePicker1;
+	TADOQuery *Napr;
+	TADOQuery *ADOQuery1;
+	TADOConnection *ADOConnection1;
+	TDataSource *DataSource1;
+private:	// User declarations
+public:		// User declarations
+	__fastcall TForm1(TComponent* Owner);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE TForm1 *Form1;
+//---------------------------------------------------------------------------
+#endif
