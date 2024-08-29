@@ -1,0 +1,57 @@
+object Form9: TForm9
+  Left = 0
+  Top = 0
+  Caption = 'Form9'
+  ClientHeight = 502
+  ClientWidth = 729
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -13
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 120
+  TextHeight = 16
+  object Memo1: TMemo
+    Left = 8
+    Top = 45
+    Width = 705
+    Height = 449
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -17
+    Font.Name = 'Courier New'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 0
+  end
+  object ADOQuery1: TADOQuery
+    Active = True
+    Connection = ADOConnection1
+    CursorType = ctStatic
+    LockType = ltBatchOptimistic
+    Parameters = <>
+    SQL.Strings = (
+      'use Practic_work'
+      'select * from Students')
+  end
+  object ADOConnection1: TADOConnection
+    Connected = True
+    ConnectionString = 
+      'Provider=SQLOLEDB.1;Integrated Security=SSPI;Persist Security In' +
+      'fo=False;Initial Catalog=Practic_work;Data Source=LENOVO\DAMSERV' +
+      'ER'
+    LoginPrompt = False
+    Provider = 'SQLOLEDB.1'
+    Top = 32
+  end
+  object DataSource1: TDataSource
+    DataSet = ADOQuery1
+    Top = 64
+  end
+  object Timer1: TTimer
+    OnTimer = Timer1Timer
+    Top = 104
+  end
+end

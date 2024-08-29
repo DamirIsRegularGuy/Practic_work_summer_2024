@@ -1,0 +1,142 @@
+object Form8: TForm8
+  Left = 0
+  Top = 0
+  BorderStyle = bsDialog
+  Caption = #1056#1077#1076#1072#1082#1090#1086#1088' '#1040#1091#1076#1080#1090#1086#1088#1080#1081
+  ClientHeight = 647
+  ClientWidth = 291
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -13
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 120
+  TextHeight = 16
+  object DBGrid1: TDBGrid
+    Left = 0
+    Top = 144
+    Width = 290
+    Height = 505
+    DataSource = DataSource1
+    TabOrder = 0
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -13
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = []
+    OnCellClick = DBGrid1CellClick
+    Columns = <
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'room'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Courier New'
+        Font.Style = [fsBold]
+        Title.Caption = #1050#1072#1073#1080#1085#1077#1090
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clWindowText
+        Title.Font.Height = -13
+        Title.Font.Name = 'Courier New'
+        Title.Font.Style = [fsBold, fsUnderline]
+        Width = 100
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'tipe'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Courier New'
+        Font.Style = [fsBold]
+        Title.Caption = #1058#1080#1087' '#1050#1072#1073#1080#1085#1077#1090#1072
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clWindowText
+        Title.Font.Height = -13
+        Title.Font.Name = 'Courier New'
+        Title.Font.Style = [fsBold, fsUnderline]
+        Width = 150
+        Visible = True
+      end>
+  end
+  object EditRoom: TEdit
+    Left = 1
+    Top = 8
+    Width = 289
+    Height = 25
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -15
+    Font.Name = 'Courier New'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 1
+    TextHint = #1053#1086#1084#1077#1088' '#1040#1091#1076#1080#1090#1086#1088#1080#1080'...'
+  end
+  object EditTipe: TEdit
+    Left = 1
+    Top = 37
+    Width = 289
+    Height = 25
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -15
+    Font.Name = 'Courier New'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 2
+    TextHint = #1058#1080#1087' '#1040#1091#1076#1080#1090#1086#1088#1080#1080'...'
+  end
+  object Button1: TButton
+    Left = 0
+    Top = 68
+    Width = 129
+    Height = 37
+    Caption = #1044#1086#1073#1072#1074#1080#1090#1100
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -15
+    Font.Name = 'Courier New'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 3
+    OnClick = Button1Click
+  end
+  object Button2: TButton
+    Left = 160
+    Top = 68
+    Width = 130
+    Height = 37
+    Caption = #1059#1076#1072#1083#1080#1090#1100
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -15
+    Font.Name = 'Courier New'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 4
+    OnClick = Button2Click
+  end
+  object ADOQuery1: TADOQuery
+    Active = True
+    Connection = Form1.ADOConnection2
+    CursorType = ctStatic
+    LockType = ltBatchOptimistic
+    Parameters = <>
+    SQL.Strings = (
+      'use Practic_work'
+      'select * from Kabin order by room')
+    Left = 16
+    Top = 168
+  end
+  object DataSource1: TDataSource
+    DataSet = ADOQuery1
+    Left = 16
+    Top = 216
+  end
+end

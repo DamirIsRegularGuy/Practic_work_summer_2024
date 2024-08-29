@@ -1,0 +1,143 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "Unit9.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+TForm9 *Form9;
+
+int xOffset = 0; // Горизонтальное смещение
+int yOffset = 0; // Вертикальное смещение
+int offset = 0;
+
+//---------------------------------------------------------------------------
+__fastcall TForm9::TForm9(TComponent* Owner)
+	: TForm(Owner)
+{
+  FillMemoWithUpcomingBirthdays();
+}
+
+void __fastcall TForm9::FillMemoWithUpcomingBirthdays()
+{
+   // Получаем текущую дату
+	TDateTime Today = Date();
+	// Определяем дату через 7 дней
+	TDateTime EndDate = Today + 7;
+
+	// Преобразуем даты в строку для SQL-запроса
+	String todayStr = FormatDateTime("yyyy-MM-dd", Today);
+	String endDateStr = FormatDateTime("yyyy-MM-dd", EndDate);
+
+	// Формируем SQL-запрос с параметрами
+	String queryStr =
+		"DECLARE @Today DATE = '" + todayStr + "'; "
+		"DECLARE @EndDate DATE = '" + endDateStr + "'; "
+		"SELECT first_name, name, last_name, birthday "
+		"FROM students "
+		"WHERE "
+		"("
+		"(MONTH(birthday) = MONTH(@Today) AND DAY(birthday) >= DAY(@Today))  "
+		"OR "
+		"(MONTH(birthday) = MONTH(@EndDate) AND DAY(birthday) <= DAY(@EndDate)) "
+		") "
+		" AND "
+		" ( "
+		" (MONTH(birthday) > MONTH(@Today) OR (MONTH(birthday) = MONTH(@Today) AND DAY(birthday) >= DAY(@Today)))  "
+		" AND "
+		" (MONTH(birthday) < MONTH(@EndDate) OR (MONTH(birthday) = MONTH(@EndDate) AND DAY(birthday) <= DAY(@EndDate))) "
+		" ) "
+		"ORDER BY "
+		"CASE "
+		"    WHEN MONTH(birthday) = MONTH(@Today) THEN DAY(birthday) - DAY(@Today) "
+		"    ELSE DAY(birthday) + (DAY(EOMONTH(@Today)) - DAY(@Today) + 1) "
+		"END";
+
+	// Закрываем запрос и устанавливаем SQL
+	ADOQuery1->Close();
+	ADOQuery1->SQL->Text = queryStr;
+
+	// Попытка открыть запрос
+	try {
+		ADOQuery1->Open();
+	} catch (Exception &e) {
+		ShowMessage("Error opening query: " + e.Message);
+		return;
+	}
+
+	// Очищаем Memo
+	Memo1->Clear();
+
+	// Проверяем наличие данных и заполняем Memo
+	if (ADOQuery1->IsEmpty()) {
+		ShowMessage("No upcoming birthdays found.");
+	} else {
+		while (!ADOQuery1->Eof)
+		{
+			// Получаем дату из поля
+			Variant birthdayVar = ADOQuery1->FieldByName("birthday")->Value;
+
+			// Преобразуем Variant в TDateTime
+			TDateTime birthDate;
+			try {
+				birthDate = VarToDateTime(birthdayVar);
+			} catch (...) {
+				ShowMessage("Error converting birthday field to TDateTime.");
+				continue;
+			}
+
+			// Преобразуем дату в строку с нужным форматом
+			String birthDateStr = FormatDateTime("dd.mm.yyyy", birthDate);
+
+			// Добавляем строку в Memo
+			Memo1->Lines->Add(
+				ADOQuery1->FieldByName("first_name")->AsString + " " +
+				ADOQuery1->FieldByName("name")->AsString + " " +
+				ADOQuery1->FieldByName("last_name")->AsString + " - " +
+				birthDateStr
+			);
+
+			ADOQuery1->Next();
+		}
+	}
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm9::Timer1Timer(TObject *Sender)
+{
+// Количество строк в Memo
+    int count = Memo1->Lines->Count;
+
+    if (count == 0) return; // Если в Memo нет строк, выходим
+
+    // Создаем новый список строк
+    TStringList* newLines = new TStringList();
+    try
+    {
+        // Перемещаем строки, последняя строка становится первой
+        for (int i = 0; i < count; i++) {
+            int index = (i + offset) % count; // Индекс строки с учетом смещения
+            newLines->Add(Memo1->Lines->Strings[index]);
+        }
+
+        // Обновляем Memo1 с новым списком строк
+        Memo1->Lines->BeginUpdate();
+        Memo1->Lines->Assign(newLines);
+        Memo1->Lines->EndUpdate();
+
+        // Увеличиваем смещение для следующего обновления
+        offset = (offset + 1) % count; // Смещение цикличное
+    }
+    __finally
+    {
+        delete newLines; // Освобождение памяти
+	}
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm9::Button2Click(TObject *Sender)
+{
+	Timer1->Enabled = true;
+}
+//---------------------------------------------------------------------------

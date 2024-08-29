@@ -1,0 +1,98 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "Unit8.h"
+#include "Unit1.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+TForm8 *Form8;
+//---------------------------------------------------------------------------
+__fastcall TForm8::TForm8(TComponent* Owner)
+	: TForm(Owner)
+{
+this->Constraints->MinWidth = this->Width;
+	this->Constraints->MinHeight = this->Height;
+	this->Constraints->MaxWidth = this->Width;
+	this->Constraints->MaxHeight = this->Height;
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm8::DBGrid1CellClick(TColumn *Column)
+{
+	// Получаем значения из выбранной строки в DBGrid
+	if (!ADOQuery1->IsEmpty()) {
+		String room = ADOQuery1->FieldByName("room")->AsString; // Замените "room" на имя вашего поля
+		String tipe = ADOQuery1->FieldByName("tipe")->AsString; // Замените "tipe" на имя вашего поля
+
+		// Устанавливаем значения в Edit
+		EditRoom->Text = room;
+		EditTipe->Text = tipe;
+	}
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm8::Button2Click(TObject *Sender)
+{
+  // Получаем значения из TEdit
+    String room = EditRoom->Text.Trim();
+    String tipe = EditTipe->Text.Trim();
+
+    // Проверяем, что значения не пустые
+    if (!room.IsEmpty() && !tipe.IsEmpty()) {
+        TADOQuery *adoQuery = ADOQuery1; // Замените ADOQuery1 на имя вашего TADOQuery
+
+        // Открываем запрос для удаления
+		adoQuery->Close();
+		adoQuery->SQL->Clear();
+		adoQuery->SQL->Add("DELETE FROM Kabin WHERE room = :Room AND tipe = :Tipe"); // Замените на ваше имя таблицы и поля
+		adoQuery->Parameters->ParamByName("Room")->Value = room;
+		adoQuery->Parameters->ParamByName("Tipe")->Value = tipe;
+		adoQuery->ExecSQL(); // Выполняем запрос
+
+		// Обновляем данные в DBGrid
+		adoQuery->Close();
+		adoQuery->SQL->Clear();
+		adoQuery->SQL->Add("SELECT * FROM Kabin order by room"); // Замените на ваш SQL запрос для загрузки данных
+		adoQuery->Open();
+
+		// Очищаем поля TEdit
+		EditRoom->Clear();
+		EditTipe->Clear();
+	} else {
+		ShowMessage("Выберите запись для удаления.");
+	}
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm8::Button1Click(TObject *Sender)
+{
+   // Получаем значения из TEdit
+	String room = EditRoom->Text.Trim();
+	String tipe = EditTipe->Text.Trim();
+
+	// Проверяем, что значения не пустые
+	if (!room.IsEmpty() && !tipe.IsEmpty()) {
+		TADOQuery *adoQuery = ADOQuery1; // Замените ADOQuery1 на имя вашего TADOQuery
+
+		// Открываем запрос для добавления
+		adoQuery->Close();
+		adoQuery->SQL->Clear();
+		adoQuery->SQL->Add("INSERT INTO Kabin (room, tipe) VALUES (:Room, :Tipe)"); // Замените на ваше имя таблицы и поля
+		adoQuery->Parameters->ParamByName("Room")->Value = room;
+		adoQuery->Parameters->ParamByName("Tipe")->Value = tipe;
+		adoQuery->ExecSQL(); // Выполняем запрос
+
+		// Обновляем данные в DBGrid
+		adoQuery->Close();
+		adoQuery->SQL->Clear();
+		adoQuery->SQL->Add("SELECT * FROM Kabin order by room"); // Замените на ваш SQL запрос для загрузки данных
+        adoQuery->Open();
+
+        // Очищаем поля TEdit
+        EditRoom->Clear();
+        EditTipe->Clear();
+    } else {
+        ShowMessage("Заполните все поля.");
+	}
+}
+//---------------------------------------------------------------------------

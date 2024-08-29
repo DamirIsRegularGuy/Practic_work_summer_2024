@@ -1,0 +1,772 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "Unit10.h"
+#include "Unit12.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+TForma10 *Forma10;
+
+int yo,num;
+double jem, number=1, i, j=0, mot;
+String piir, yo1;
+//---------------------------------------------------------------------------
+__fastcall TForma10::TForma10(TComponent* Owner)
+	: TForm(Owner)
+{
+
+	this->Constraints->MinWidth = this->Width;
+	this->Constraints->MinHeight = this->Height;
+	this->Constraints->MaxWidth = this->Width;
+	this->Constraints->MaxHeight = this->Height;
+}
+
+void __fastcall TForma10::SetEdit5Text(String text) {
+	Edit6->Text = text;
+}
+//---------------------------------------------------------------------------
+void __fastcall TForma10::Button1Click(TObject *Sender)
+{
+  if(Edit1->Text!="" && Edit2->Text!="")
+   {
+		ADOQuery1->Close();
+		ADOQuery1->SQL->Clear();
+		ADOQuery1->SQL->Add("use Practic_work");
+		ADOQuery1->SQL->Add("insert into Diary(DataTime, Name, Evant)");
+		ADOQuery1->SQL->Add("values('"+Edit1->Text+"','"+Edit2->Text+"','"+Edit3->Text+"')");
+		ShowMessage(ADOQuery1->SQL->Text);
+		ADOQuery1->ExecSQL();
+   }
+   else
+   {
+	 ShowMessage("Для добавления события, надо ввести хотя бы дату и имя соответствующего события");
+   }
+
+   ADOQuery1->Close();
+   ADOQuery1->SQL->Clear();
+   ADOQuery1->SQL->Add("use Practic_work");
+   ADOQuery1->SQL->Add("select * from Diary");
+   //ShowMessage(ADOQuery1->SQL->Text);
+   ADOQuery1->Open();
+
+}
+//---------------------------------------------------------------------------
+void __fastcall TForma10::DBGrid2CellClick(TColumn *Column)
+{
+yo=ADOQuery1->FieldByName("id")->AsInteger;
+  TDateTime currentTime = Now();
+  TDateTime userInputTime;
+  TPoint mousePos=Mouse->CursorPos;
+  PopupMenu1->Popup(mousePos.X, mousePos.Y);
+  num=ADOQuery1->RecNo;
+
+
+   ADOQuery1->Close();
+   ADOQuery1->SQL->Clear();
+   ADOQuery1->SQL->Add("use Practic_work");
+   ADOQuery1->SQL->Add("select * from Diary");
+   //ShowMessage(ADOQuery1->SQL->Text);
+   ADOQuery1->Open();
+
+}
+//---------------------------------------------------------------------------
+void __fastcall TForma10::FormClose(TObject *Sender, TCloseAction &Action)
+{
+	if(CheckBox1->Checked==true)
+	{
+	Forma10->Visible=false;
+	Action=caNone;
+	}
+}
+//---------------------------------------------------------------------------
+void __fastcall TForma10::TrayIcon1Click(TObject *Sender)
+{
+Forma10->Visible=true;
+}
+//---------------------------------------------------------------------------
+void __fastcall TForma10::TabSheet1Exit(TObject *Sender)
+{
+  ADOQuery1->Close();
+   ADOQuery1->SQL->Clear();
+   ADOQuery1->SQL->Add("use Practic_work");
+   ADOQuery1->SQL->Add("select * from Diary");
+   //ShowMessage(ADOQuery1->SQL->Text);
+   ADOQuery1->Open();
+
+}
+//---------------------------------------------------------------------------
+void __fastcall TForma10::N1Click(TObject *Sender)
+{
+  TDateTime currentTime=Date();
+  TDateTime InputTime;
+  String currentStr;
+  String InputStr;
+
+  ADOQuery1->Close();
+  ADOQuery1->SQL->Clear();
+  ADOQuery1->SQL->Add("use Practic_work");
+  ADOQuery1->SQL->Add("select * from Diary where id="+IntToStr(yo));
+  //ShowMessage(ADOQuery1->SQL->Text);
+  ADOQuery1->Open();
+  InputTime=ADOQuery1->FieldByName("DataTime")->AsString;
+  //currentStr=DateTimeToStr(currentTime);
+  InputStr=DateTimeToStr(InputTime);
+  if(InputStr.Length()>10) InputStr.Delete(11,19);
+  InputTime=StrToDateTime(InputStr);
+  //ShowMessage(InputTime);
+
+  if (currentTime < InputTime)
+  {
+	ShowMessage("Событие еще не наступило.");
+  }
+  else if (currentTime > InputTime)
+  {
+	ShowMessage("Событие прошло.");
+  }
+  else if(currentTime == InputTime)
+  {
+	ShowMessage("Сегодня день события.");
+  }
+
+   ADOQuery1->Close();
+   ADOQuery1->SQL->Clear();                              +
+   ADOQuery1->SQL->Add("use Practic_work");
+   ADOQuery1->SQL->Add("select * from Diary");
+   //ShowMessage(ADOQuery1->SQL->Text);
+   ADOQuery1->Open();
+   ADOQuery1->RecNo=num;
+
+}
+//---------------------------------------------------------------------------
+void __fastcall TForma10::N2Click(TObject *Sender)
+{
+		int result = MessageDlg("Вы действительно хотите удалить эти данные, после удаления их восстановление будет невозможным", mtConfirmation, TMsgDlgButtons() << mbYes << mbNo, 0);
+	if (result == mrYes)
+	{
+	ADOQuery1->Close();
+	ADOQuery1->SQL->Clear();
+	ADOQuery1->SQL->Add("use Practic_work");
+	ADOQuery1->SQL->Add("delete from Diary where id = " + IntToStr(yo));
+	//ShowMessage(ADOQuery1->SQL->Text);
+	ADOQuery1->ExecSQL();
+	}
+
+
+   ADOQuery1->Close();
+   ADOQuery1->SQL->Clear();
+   ADOQuery1->SQL->Add("use Practic_work");
+   ADOQuery1->SQL->Add("select * from Diary");
+   //ShowMessage(ADOQuery1->SQL->Text);
+   ADOQuery1->Open();
+
+}
+//---------------------------------------------------------------------------
+void __fastcall TForma10::N3Click(TObject *Sender)
+{
+   ADOQuery1->Close();
+		ADOQuery1->SQL->Clear();
+		ADOQuery1->SQL->Add("use Practic_work");
+		ADOQuery1->SQL->Add("update Diary");
+		ADOQuery1->SQL->Add("set");
+		if(Edit1->Text!="") ADOQuery1->SQL->Add("DataTime='"+Edit1->Text+"'");
+		if(Edit2->Text!="")
+		{
+		  if(Edit1->Text!="")ADOQuery1->SQL->Add(",Name='"+Edit2->Text+"'");
+		  else ADOQuery1->SQL->Add("Name='"+Edit2->Text+"'");
+		}
+		if(Edit3->Text!="")
+		{
+		  if(Edit1->Text!="" || Edit2->Text!="") ADOQuery1->SQL->Add(",Evant='"+Edit3->Text+"'");
+		  else ADOQuery1->SQL->Add("Evant='"+Edit3->Text+"'");
+		}
+		ADOQuery1->SQL->Add("where id ="+IntToStr(yo));
+		//ShowMessage(ADOQuery1->SQL->Text);
+		ADOQuery1->ExecSQL();
+
+   ADOQuery1->Close();
+   ADOQuery1->SQL->Clear();
+   ADOQuery1->SQL->Add("use Practic_work");
+   ADOQuery1->SQL->Add("select * from Diary");
+   //ShowMessage(ADOQuery1->SQL->Text);
+   ADOQuery1->Open();
+   ADOQuery1->RecNo=num;
+
+}
+//---------------------------------------------------------------------------
+void __fastcall TForma10::Timer2Timer(TObject *Sender)
+{
+  TDateTime currentTime=Date(),times;
+  TDateTime InputTime, InputTimeS;
+  TDateTime SetTime=TDateTime(0,0,0.5,0), SitTime;
+  String currentStr, InputStr, InputS, SitStr, hoop;
+  double you=i;
+
+  ADOQuery1->Close();
+  ADOQuery1->SQL->Clear();
+  ADOQuery1->SQL->Add("use Practic_work");
+  ADOQuery1->SQL->Add("select * from Diary");
+  //ShowMessage(ADOQuery1->SQL->Text);
+  ADOQuery1->Open();
+  while(!ADOQuery1->Eof)
+  {
+	  InputTime=ADOQuery1->FieldByName("DataTime")->AsString;
+	  currentStr=DateTimeToStr(currentTime);
+	  if(RadioButton1->Checked && InputTime>=currentTime)
+	  {
+		if((InputTime-(jem))<currentTime) jem--;//InputTime=currentTime;
+	  }
+	  InputTime=InputTime-(jem);
+	  InputStr=DateTimeToStr(InputTime);
+	  if(InputStr.Length()>10) InputStr.Delete(11,19);
+	  InputTime=StrToDateTime(InputStr);
+	  //ShowMessage(InputTime);
+
+	  if(currentTime == InputTime)
+	  {
+		InputTimeS=ADOQuery1->FieldByName("DataTime")->AsString;
+		InputTimeS=InputTimeS-(jem);
+		InputS=DateTimeToStr(InputTimeS);
+		if(InputS.Length()>10) InputS.Delete(1,11);
+		InputTimeS=StrToDateTime(InputS);
+		if(piir=="" || mot>=0)
+		{
+			while(mot>=0)
+			{
+				//InputTime=InputTime-1/(24.0*60.0);
+				//InputTimeS=InputTimeS-(you/24.0);
+				//InputTime-((i/number)*(jem/24.0))
+				if(RadioButton1->Checked) piir=piir+DateTimeToStr((InputTimeS)-(mot/24.0))+' ';
+				else if(RadioButton2->Checked){ piir=piir+DateTimeToStr((InputTimeS+jem)-((mot/number)*(jem)))+' ';}
+				else if(RadioButton3->Checked){ piir=piir+DateTimeToStr((InputTimeS+jem)-((mot/number)*(jem)))+' ';}
+				mot--;
+			}
+			//if(i!=1)piir=piir+DateTimeToStr(InputTimeS+jem);
+		}
+
+		times=Time();
+
+		//SitTime=InputTimeS-times;
+		//SitStr=DateTimeToStr(SitTime);
+		//if(SitStr.Length()>10) SitStr.Delete(0,11);
+		//SitTime=StrToDateTime(SitStr);
+
+		if(piir!="")
+		{
+		hoop=piir.SubString(12,8);
+		SitTime=StrToDateTime(hoop);
+		//String timess=DateTimeToStr(times);
+		//timess.Delete(18,2);
+		//timess=timess+"00";
+		//times=StrToDateTime(timess);
+		//ShowMessage(piir);
+		if(times>SitTime)
+		{
+		   piir.Delete(1,20);
+		   hoop=piir.SubString(12,8);
+		   if(piir!="") SitTime=StrToDateTime(hoop);
+		   //String timess=DateTimeToStr(times);
+		   //timess.Delete(18,2);
+		   //timess=timess+"00";
+		   //times=StrToDateTime(timess);
+		}
+		}
+		//ShowMessage(piir);
+		//SitStr=DateTimeToStr(times);
+		//hoop=DateTimeToStr(SitTime);
+		//ShowMessage("Сегодня день события.");
+		SitTime=(SitTime-times);
+		SitStr=DateTimeToStr(SitTime);
+		if(SitStr.Length()>10) SitStr.Delete(0,11);
+		SitTime=StrToDateTime(SitStr);
+		if(SitTime<=SetTime)
+		{
+		TrayIcon1->BalloonHint=ADOQuery1->FieldByName("Name")->AsString;
+		TrayIcon1->BalloonTimeout=15000;
+		TrayIcon1->BalloonFlags=bfInfo;
+		TrayIcon1->ShowBalloonHint();
+		piir.Delete(1,20);
+		i=i-1;
+		//ShowMessage(i);
+		}
+	  }
+	  ADOQuery1->Next();
+	  if(i<=0 || piir==""){Timer2->Enabled=false;CheckBox1->Checked=false;}
+  }
+}
+//---------------------------------------------------------------------------
+void __fastcall TForma10::CheckBox1Click(TObject *Sender)
+{
+if(CheckBox1->Checked==true) Timer2->Enabled=true;
+   else{ Timer2->Enabled=false; piir=""; j=0;}
+   if(RadioButton1->Checked) jem=StrToInt(Edit4->Text);
+   else if(RadioButton2->Checked) jem=StrToInt(Edit4->Text)/24.0;
+   else if(RadioButton3->Checked) jem=(StrToInt(Edit4->Text)/60.0)/24.0;
+
+}
+//---------------------------------------------------------------------------
+void __fastcall TForma10::TrayIcon1BalloonClick(TObject *Sender)
+{
+this->Show();
+   this->WindowState=wsNormal;
+}
+//---------------------------------------------------------------------------
+void __fastcall TForma10::Button2Click(TObject *Sender)
+{
+   TDateTime currentTime=Date(),times, days;
+  TDateTime InputTime, InputTimeS;
+  TDateTime SetTime=TDateTime(0,0,0.5,0), SitTime;
+  String currentStr, InputStr, InputS, SitStr, hoop;
+  double you=i;
+
+  ADOQuery1->Close();
+  ADOQuery1->SQL->Clear();
+  ADOQuery1->SQL->Add("use Practic_work");
+  ADOQuery1->SQL->Add("select * from Diary");
+  //ShowMessage(ADOQuery1->SQL->Text);
+  ADOQuery1->Open();
+  while(!ADOQuery1->Eof)
+  {
+	  InputTime=ADOQuery1->FieldByName("DataTime")->AsString;
+	  currentStr=DateTimeToStr(currentTime);
+	  if(RadioButton1->Checked)
+	  {
+		if((InputTime-(jem))<currentTime)jem=jem-1;
+	  }
+	  InputTime=InputTime-(jem);
+	  InputStr=DateTimeToStr(InputTime);
+	  if(InputStr.Length()>10) InputStr.Delete(11,19);
+	  InputTime=StrToDateTime(InputStr);
+	  //ShowMessage(InputTime);
+
+	  if(currentTime == InputTime)
+	  {
+		InputTimeS=ADOQuery1->FieldByName("DataTime")->AsString;
+		InputTimeS=InputTimeS-(jem);
+		InputS=DateTimeToStr(InputTimeS);
+		if(InputS.Length()>10) InputS.Delete(1,11);
+		InputTimeS=StrToDateTime(InputS);
+		if(piir=="" || mot>=0)
+		{
+			while(mot>=0)
+			{
+				//InputTime=InputTime-1/(24.0*60.0);
+				//InputTimeS=InputTimeS-(you/24.0);
+				//InputTime-((i/number)*(jem/24.0))
+				if(RadioButton1->Checked) piir=piir+DateTimeToStr((InputTimeS)-(mot/24.0))+' ';
+				else if(RadioButton2->Checked){ piir=piir+DateTimeToStr((InputTimeS+jem)-((mot/number)*(jem)))+' ';}
+				else if(RadioButton3->Checked){ piir=piir+DateTimeToStr((InputTimeS+jem)-((mot/number)*(jem)))+' ';}
+				mot--;
+			}
+			piir=piir+DateTimeToStr(InputTimeS+jem);
+		}
+
+		times=Time();
+
+		//SitTime=InputTimeS-times;
+		//SitStr=DateTimeToStr(SitTime);
+		//if(SitStr.Length()>10) SitStr.Delete(0,11);
+		//SitTime=StrToDateTime(SitStr);
+
+		hoop=piir.SubString(12,8);
+		SitTime=StrToDateTime(hoop);
+		ShowMessage(piir);
+		if(times>SitTime)
+		{
+		   piir.Delete(1,20);
+		   hoop=piir.SubString(12,8);
+		   SitTime=StrToDateTime(hoop);
+		   String timess=DateTimeToStr(times);
+		   timess.Delete(18,2);
+		   timess=timess+"00";
+		}
+		ShowMessage(piir);
+		//SitStr=DateTimeToStr(times);
+		//hoop=DateTimeToStr(SitTime);
+			//ShowMessage("Сегодня день события.");
+			String timess=DateTimeToStr(times);
+			timess.Delete(18,2);
+			timess=timess+"00";
+			ShowMessage(SitTime);
+			ShowMessage(times);
+			SitTime=(SitTime-times);
+			ShowMessage(SitTime);
+			if(SitTime<=SetTime)
+			{
+			TrayIcon1->BalloonHint=ADOQuery1->FieldByName("Name")->AsString;
+			TrayIcon1->BalloonTimeout=15000;
+			TrayIcon1->BalloonFlags=bfInfo;
+			TrayIcon1->ShowBalloonHint();
+			piir.Delete(1,20);
+			i=i-1;
+			//ShowMessage(i);
+			}
+	  }
+	  ADOQuery1->Next();
+	  if(i<=0 || piir==""){Timer2->Enabled=false;CheckBox1->Checked=false;}
+  }
+
+
+
+
+/*
+   TDateTime InputTime=TDateTime(19,50,0,0);
+   TDateTime InputTimeS=TDateTime(2023,12,23,19,51,0,0);
+   InputTime=InputTime-1/(24.0*60.0);
+   String InputStr, InputS;
+   InputStr="16:51:00";
+   InputTime=StrToDateTime(InputStr);
+   ShowMessage(InputTime);
+ */
+
+
+  /*
+  TDateTime currentTime=Time();
+  //TDateTime times=Time();
+  TDateTime InputTime=TDateTime(2023,12,23,19,50,0,0);
+  TDateTime InputTimeS=TDateTime(2023,12,23,19,51,0,0);
+  String currentStr;
+  String InputStr, InputS;
+
+  number=StrToInt(Edit5->Text);
+  int jem=StrToInt(Edit4->Text);
+  int i=number;
+
+
+  ADOQuery1->Close();
+  ADOQuery1->SQL->Clear();
+  ADOQuery1->SQL->Add("use Project2");
+  ADOQuery1->SQL->Add("select * from Diary");
+  //ShowMessage(ADOQuery1->SQL->Text);
+  ADOQuery1->Open();
+		TDateTime times=Now();
+		String timess=DateTimeToStr(times);
+		timess.Delete(18,2);
+		timess=timess+"00";
+		//InputTime=InputTimeS-InputTime ;
+		times=(i/number)*(jem/24);
+		//double first =((i/number)*(jem/24));
+
+		InputTimeS=TDateTime(0,0,((i/number)*(jem/24)),0);
+		InputTime=InputTime-InputTimeS;
+
+		InputTime=InputTime-((i/number)*(jem/24.0));//((i/number)*(jem/24));
+
+		InputTime=InputTime-TDateTime((i/number)*(jem/24));
+
+		ShowMessage(InputTime);
+		//if(timess.Length()>10) timess.Delete(1,11);
+		times=StrToDateTime(timess);
+		*/
+
+}
+//---------------------------------------------------------------------------
+void __fastcall TForma10::DBGrid2DrawColumnCell(TObject *Sender, const TRect &Rect,
+		  int DataCol, TColumn *Column, TGridDrawState State)
+{
+   int rowIndex = DBGrid2->DataSource->DataSet->RecNo;
+	TColor fontColor = clBlack;
+	if (rowIndex > 0 && rowIndex <= ADOQuery1->RecordCount)
+	 {
+		TDateTime currentTime = Date();
+		TDateTime InputTime = ADOQuery1->FieldByName("DataTime")->AsDateTime;
+		String InputStr=DateTimeToStr(InputTime);
+		if(InputStr.Length()>10) InputStr.Delete(11,19);
+		InputTime=StrToDateTime(InputStr);
+
+		if (currentTime < InputTime)
+		{
+			fontColor = clGreen;
+		}
+		else if (currentTime > InputTime)
+		{
+			fontColor = clWhite;
+		}
+		else if (currentTime == InputTime)
+		 {
+			fontColor = clBlue;
+		}
+	}
+	DBGrid2->Canvas->Font->Color = fontColor;
+	DBGrid2->DefaultDrawColumnCell(Rect, DataCol, Column, State);
+
+}
+//---------------------------------------------------------------------------
+void __fastcall TForma10::DBGrid1DrawColumnCell(TObject *Sender, const TRect &Rect,
+		  int DataCol, TColumn *Column, TGridDrawState State)
+{
+int rowIndex = DBGrid1->DataSource->DataSet->RecNo;
+	TColor fontColor = clBlack;
+	if (rowIndex > 0 && rowIndex <= ADOQuery1->RecordCount)
+	 {
+		TDateTime currentTime = Date();
+		TDateTime InputTime = ADOQuery1->FieldByName("DataTime")->AsDateTime;
+		String InputStr=DateTimeToStr(InputTime);
+		if(InputStr.Length()>10) InputStr.Delete(11,19);
+		InputTime=StrToDateTime(InputStr);
+
+		if (currentTime < InputTime)
+		{
+			fontColor = clGreen;
+		}
+		else if (currentTime > InputTime)
+		{
+			fontColor = clWhite;
+		}
+		else if (currentTime == InputTime)
+		 {
+			fontColor = clBlue;
+		}
+	}
+	DBGrid1->Canvas->Font->Color = fontColor;
+	DBGrid1->DefaultDrawColumnCell(Rect, DataCol, Column, State);
+
+}
+//---------------------------------------------------------------------------
+void __fastcall TForma10::Timer1Timer(TObject *Sender)
+{
+
+  //TDateTime currentTime = Now();
+
+  TDateTime currentTime=Date();
+  TDateTime times;
+  TDateTime InputTime, InputTimeS;
+  TDateTime SetTime=TDateTime(0,0,0.5,0), SitTime;
+
+  String currentStr, InputStr, InputS, SitStr;
+  //ShowMessage(i);
+
+  ADOQuery1->Close();
+  ADOQuery1->SQL->Clear();
+  ADOQuery1->SQL->Add("use Practic_work");
+  ADOQuery1->SQL->Add("select * from Diary");
+  //ShowMessage(ADOQuery1->SQL->Text);
+  ADOQuery1->Open();
+  while(!ADOQuery1->Eof)
+  {
+	  InputTime=ADOQuery1->FieldByName("DataTime")->AsString;
+	  currentStr=DateTimeToStr(currentTime);
+	  InputTime=InputTime-((i/number)*(jem/24.0));
+	  InputStr=DateTimeToStr(InputTime);
+	  if(InputStr.Length()>10) InputStr.Delete(11,19);
+	  InputTime=StrToDateTime(InputStr);
+	  //ShowMessage(InputTime);
+
+	  if(currentTime == InputTime)
+	  {
+		InputTimeS=ADOQuery1->FieldByName("DataTime")->AsString;
+		InputTimeS=InputTimeS-((i/number)*(jem/24.0));
+		InputS=DateTimeToStr(InputTimeS);
+		//if(InputS.Length()>10)
+		//{
+		//InputS.Delete(18,2);
+		//InputS=InputS+"00";
+		//InputTimeS=StrToDateTime(InputS);
+		//}
+		//if(InputS.Length()>10) InputS.Delete(1,11);
+
+
+		times=Now();
+		//String timess=DateTimeToStr(times);
+		//timess.Delete(18,2);
+		//timess=timess+"00";
+		//if(timess.Length()>10) timess.Delete(1,11);
+		//times=StrToDateTime(timess);
+
+		SitTime=InputTimeS-times;
+		SitStr=DateTimeToStr(SitTime);
+		if(SitStr.Length()>10) SitStr.Delete(0,11);
+		SitTime=StrToDateTime(SitStr);
+
+			//ShowMessage("Сегодня день события.");
+			if(SitTime<=SetTime)
+			{
+			TrayIcon1->BalloonHint=ADOQuery1->FieldByName("Name")->AsString;
+			TrayIcon1->BalloonTimeout=15000;
+			TrayIcon1->BalloonFlags=bfInfo;
+			TrayIcon1->ShowBalloonHint();
+
+			i=i-1;
+			ShowMessage(i);
+			//Timer2->Enabled=false;
+			}
+	   // ADOQuery1->Prior();
+	  }
+	  ADOQuery1->Next();
+	  if(i<=0){Timer2->Enabled=false;CheckBox1->Checked=false;}
+  }
+
+
+  /*
+  TDateTime currentTime=Date(),times=Time();
+  TDateTime InputTime, InputTimeS, InputData;
+  String currentStr,InputStr, InputS;
+
+  ADOQuery1->Close();
+  ADOQuery1->SQL->Clear();
+  ADOQuery1->SQL->Add("use Project2");
+  ADOQuery1->SQL->Add("select * from Diary");
+  //ShowMessage(ADOQuery1->SQL->Text);
+  ADOQuery1->Open();
+
+  number=StrToInt(Edit5->Text);
+  int jem=StrToInt(Edit4->Text);
+  int i=number;
+  bool pool=true;
+
+  while(!ADOQuery1->Eof)
+  {
+	  pool=true;
+	  InputTime=ADOQuery1->FieldByName("DataTime")->AsString;
+	  InputStr=DateTimeToStr(InputTime);
+	  if(InputStr.Length()>10) InputStr.Delete(11,19);
+	  InputTime=StrToDateTime(InputStr);
+
+	  if(currentTime == InputTime)
+	  {
+		//InputTimeS=ADOQuery1->FieldByName("DataTime")->AsString;
+		//times=Now();
+	   //if(int(InputTimeS-times)>0)
+	   //{
+
+		InputTimeS=ADOQuery1->FieldByName("DataTime")->AsString;
+		times=Now();
+	   while(InputTimeS!=times)
+	   {
+		InputTimeS=ADOQuery1->FieldByName("DataTime")->AsString;
+		times=Now();
+		InputTimeS=InputTimeS-((i/number)*(jem/24));
+			if(InputTimeS==times)
+			{
+			   TrayIcon1->BalloonHint=ADOQuery1->FieldByName("Name")->AsString;
+			   TrayIcon1->BalloonTimeout=15000;
+			   TrayIcon1->BalloonFlags=bfInfo;
+			   TrayIcon1->ShowBalloonHint();
+			   i--;
+			}
+	   //}
+	   }
+	  }
+	  ADOQuery1->Next();
+  }
+  if(i<0) Timer2->Enabled=false;
+	*/
+
+}
+//---------------------------------------------------------------------------
+void __fastcall TForma10::Edit5KeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
+
+{
+String ser;
+	 if(Key==32)
+	 {
+		 number=StrToInt(Edit5->Text);
+		 i=number;
+		 mot=i;
+		 piir="";
+		 ShowMessage("Отлично Мы учли количество уведомлений, теперь если хотите установить определенное время для уведомления - продолжайте вводить в данное поле ваше время с определенным форматом. Для установления времени по умолчанию наберите 77:77:77.");
+		 Edit5->Clear();
+		 //Edit4->SetFocus();
+		 Edit5->EditMask="!90:00:00;1;_";
+	 }
+
+
+	 if(Key==13)
+	 {
+
+		 ser=Edit5->Text;
+		 if(ser=="77:77:77")
+		 {
+			Edit5->Clear();
+			ShowMessage("Значения по умолчанию будут установлены в зависимости от Даты уведомления.");
+			//piir="";
+		 }
+
+		 else if(j<i)
+		 {
+			ListBox1->Items->Add(Edit5->Text);
+			piir=piir+"30.12.1899 "+Edit5->Text+' ';
+			Edit5->Clear();
+			j++;
+			mot--;
+			//Form2->ListBox1->Items->Add(Edit5->Text);
+		 }
+		 else if(j>=i)
+		 {
+			 ShowMessage("Вы привысили допустимое значение уведомлений, настоятельно прошу дальнейший ввод чего-либо.");
+			 j=0;
+			 Edit5->EditMask = "";
+			 Edit5->ReadOnly = true;
+			 Edit5->Clear();
+			 Edit6->Text = piir;
+		 }
+		 //ShowMessage(piir);
+	 }
+
+
+}
+//---------------------------------------------------------------------------
+void __fastcall TForma10::Edit4Change(TObject *Sender)
+{
+  Edit5->Clear();
+  Edit5->EditMask="";
+}
+//---------------------------------------------------------------------------
+void __fastcall TForma10::Button4Click(TObject *Sender)
+{
+   piir = Edit5->Text;
+   Edit5->Clear();
+   CheckBox1->Checked = true;
+   ShowMessage(piir);
+}
+//---------------------------------------------------------------------------
+void __fastcall TForma10::Button3Click(TObject *Sender)
+{
+   Form12->Show();
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TForma10::PageControl1Change(TObject *Sender)
+{
+int activeIndex = PageControl1->ActivePageIndex;
+
+	// Проверяем, является ли текущий пользователь Гостем
+	if (RegistrationRoot == "Гость" && (activeIndex == 1))
+	{
+		ShowMessage("Гостям доступ к этой вкладке запрещен");
+
+		// Возвращаемся к первой вкладке
+		PageControl1->ActivePageIndex = 0;
+	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForma10::ListBox1Click(TObject *Sender)
+{
+if(ListBox1->ItemIndex != -1)
+   {
+	  Edit7->Text = ListBox1->Items->Strings[ListBox1->ItemIndex];
+	  yo1 = Edit7->Text;
+}
+   }
+//---------------------------------------------------------------------------
+
+void __fastcall TForma10::Button5Click(TObject *Sender)
+{
+  String str1 = Edit6->Text;
+str1 = StringReplace(str1, yo1, Edit7->Text, TReplaceFlags() << rfReplaceAll);
+Edit6->Text = str1;
+Edit5->Text = str1;
+
+int selected = ListBox1->ItemIndex;
+if (selected != -1) {
+	ListBox1->Items->Strings[selected] = Edit7->Text; // Обновление элемента в ListBox
+}
+
+
+}
+//---------------------------------------------------------------------------
+

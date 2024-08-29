@@ -33,24 +33,21 @@ void __fastcall TForm9::FillMemoWithUpcomingBirthdays()
 
 	// Формируем SQL-запрос с параметрами
 	String queryStr =
-		"DECLARE @Today DATE = '" + todayStr + "'; "
-		"DECLARE @EndDate DATE = '" + endDateStr + "'; "
-		"SELECT first_name, name, last_name, birthday "
-		"FROM students "
-		"WHERE "
-		"(DATEPART(MM, birthday) = DATEPART(MM, @Today) "
-		" AND DATEPART(DAY, birthday) BETWEEN DATEPART(DAY, @Today) AND DATEPART(DAY, @EndDate)) "
-		"OR "
-		"(DATEPART(MM, birthday) = DATEPART(MM, DATEADD(MONTH, 1, @Today)) "
-		" AND DATEPART(DAY, birthday) <= DATEPART(DAY, @EndDate) "
-		" AND DATEADD(MONTH, 1, @Today) <= @EndDate) "
-		"ORDER BY "
-		"CASE "
-		"    WHEN DATEPART(MM, birthday) = DATEPART(MM, @Today) "
-		"        THEN DATEPART(DAY, birthday) - DATEPART(DAY, @Today) "
-		"    WHEN DATEPART(MM, birthday) = DATEPART(MM, DATEADD(MONTH, 1, @Today)) "
-		"        THEN DATEPART(DAY, birthday) + (DATEPART(DAY, @EndDate) - DATEPART(DAY, @Today) + 1) "
-		"END";
+        "DECLARE @Today DATE = :today; "
+        "DECLARE @EndDate DATE = :endDate; "
+        "SELECT first_name, name, last_name, birthday "
+        "FROM students "
+        "WHERE "
+        "("
+        "    (MONTH(birthday) = MONTH(@Today) AND DAY(birthday) >= DAY(@Today)) "
+        "    OR "
+        "    (MONTH(birthday) = MONTH(@EndDate) AND DAY(birthday) <= DAY(@EndDate)) "
+        ") "
+        "ORDER BY "
+        "CASE "
+        "    WHEN MONTH(birthday) = MONTH(@Today) THEN DAY(birthday) - DAY(@Today) "
+        "    ELSE DAY(birthday) + (DAY(@EndDate) - DAY(@Today) + 1) "
+        "END;";
 
 	// Закрываем запрос и устанавливаем SQL
 	ADOQuery1->Close();
